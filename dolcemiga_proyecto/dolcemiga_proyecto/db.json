@@ -1,0 +1,239 @@
+{
+  "productos": [
+    {
+      "id": "1",
+      "nombre": "Torta Chocolate",
+      "stock": 14,
+      "precio": 25,
+      "categoria": "Tortas",
+      "imagen": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80",
+      "descripcion": "Deliciosa torta de chocolate con cobertura cremosa"
+    },
+    {
+      "id": "2",
+      "nombre": "Cupcakes Vainilla",
+      "stock": 21,
+      "precio": 3.5,
+      "categoria": "Postres Individuales",
+      "imagen": "https://images.unsplash.com/photo-1614707267537-b85aaf00c4b7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80",
+      "descripcion": "Suaves cupcakes de vainilla con frosting"
+    },
+    {
+      "id": "3",
+      "nombre": "Galletas Mantequilla",
+      "stock": 43,
+      "precio": 1.2,
+      "categoria": "Galletas",
+      "imagen": "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80",
+      "descripcion": "Crujientes galletas de mantequilla artesanales"
+    }
+  ],
+  "categorias": [
+    {
+      "id": "1",
+      "nombre": "Tortas"
+    },
+    {
+      "id": "2",
+      "nombre": "Postres Individuales"
+    },
+    {
+      "id": "3",
+      "nombre": "Galletas"
+    },
+    {
+      "id": "4",
+      "nombre": "Panadería"
+    },
+    {
+      "id": "5",
+      "nombre": "Postres Especiales"
+    }
+  ],
+  "pedidos": [
+    {
+      "id": "3299",
+      "cliente": {
+        "dni": "74883675",
+        "nombres": "Jean",
+        "telefono": "946087675"
+      },
+      "productos": [
+        {
+          "productoId": 2,
+          "nombre": "Cupcakes Vainilla",
+          "precio": 3.5,
+          "cantidad": 1,
+          "subtotal": 3.5
+        }
+      ],
+      "total": 3.5,
+      "fecha": "2025-11-18T19:51:13.586Z",
+      "estado": "completado",
+      "metodoPago": "yape"
+    },
+    {
+      "id": "206",
+      "cliente": {
+        "dni": "73775085",
+        "nombres": "Danna Abad",
+        "telefono": "935654879"
+      },
+      "productos": [
+        {
+          "productoId": 1,
+          "nombre": "Torta Chocolate",
+          "precio": 25,
+          "cantidad": 1,
+          "subtotal": 25
+        },
+        {
+          "productoId": 2,
+          "nombre": "Cupcakes Vainilla",
+          "precio": 3.5,
+          "cantidad": 1,
+          "subtotal": 3.5
+        }
+      ],
+      "total": 28.5,
+      "fecha": "2025-11-07T19:52:32.787Z",
+      "estado": "completado",
+      "metodoPago": "tarjeta"
+    },
+    {
+      "id": "932",
+      "cliente": {
+        "dni": "77571406",
+        "nombres": "yadsumi",
+        "telefono": "963258741"
+      },
+      "productos": [
+        {
+          "productoId": 1,
+          "nombre": "Torta Chocolate",
+          "precio": 25,
+          "cantidad": 1,
+          "subtotal": 25
+        },
+        {
+          "productoId": 2,
+          "nombre": "Cupcakes Vainilla",
+          "precio": 3.5,
+          "cantidad": 1,
+          "subtotal": 3.5
+        }
+      ],
+      "total": 28.5,
+      "fecha": "2025-11-23T02:22:33.172Z",
+      "estado": "completado",
+      "metodoPago": "efectivo"
+    },
+    {
+      "id": "666",
+      "cliente": {
+        "dni": "45896587",
+        "nombres": "Alonso Doza",
+        "telefono": "965632547"
+      },
+      "productos": [
+        {
+          "productoId": 1,
+          "nombre": "Torta Chocolate",
+          "precio": 25,
+          "cantidad": 1,
+          "subtotal": 25
+        },
+        {
+          "productoId": 2,
+          "nombre": "Cupcakes Vainilla",
+          "precio": 3.5,
+          "cantidad": 6,
+          "subtotal": 21
+        },
+        {
+          "productoId": 3,
+          "nombre": "Galletas Mantequilla",
+          "precio": 1.2,
+          "cantidad": 2,
+          "subtotal": 2.4
+        }
+      ],
+      "total": 48.4,
+      "fecha": "2025-11-23T04:59:32.861Z",
+      "estado": "completado",
+      "metodoPago": "tarjeta"
+    },
+    {
+      "id": "d394",
+      "cliente": {
+        "dni": "40627813",
+        "nombres": "Luis Alonso Diaz Gutierrez",
+        "telefono": "967483712"
+      },
+      "productos": [
+        {
+          "productoId": "1",
+          "nombre": "Torta Chocolate",
+          "precio": 25,
+          "cantidad": 1,
+          "subtotal": 25
+        }
+      ],
+      "total": 25,
+      "fecha": "2025-12-04T03:54:01.824Z",
+      "estado": "completado",
+      "metodoPago": "tarjeta"
+    },
+    {
+      "id": "6cf5",
+      "cliente": {
+        "dni": "23",
+        "nombres": "213",
+        "telefono": "23231"
+      },
+      "productos": [
+        {
+          "productoId": "1",
+          "nombre": "Torta Chocolate",
+          "precio": 25,
+          "cantidad": 1,
+          "subtotal": 25
+        }
+      ],
+      "total": 25,
+      "fecha": "2025-12-08T05:18:28.005Z",
+      "estado": "completado",
+      "metodoPago": "yape"
+    }
+  ],
+  "clientes": [],
+  "usuarios": [
+    {
+      "id": "1",
+      "username": "admin",
+      "contra": "admin123",
+      "email": "admin@dolcemiga.com",
+      "nombre": "Administrador",
+      "rol": "admin",
+      "activo": true
+    },
+    {
+      "id": "2",
+      "username": "vendedor",
+      "contra": "vendedor123",
+      "email": "vendedor@dolcemiga.com",
+      "nombre": "Vendedor Principal",
+      "rol": "vendedor",
+      "activo": true
+    },
+    {
+      "id": "3",
+      "username": "maria",
+      "contra": "maria123",
+      "email": "maria@dolcemiga.com",
+      "nombre": "Maria Gonzalez",
+      "rol": "vendedor",
+      "activo": true
+    }
+  ]
+}
