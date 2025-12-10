@@ -11,16 +11,6 @@ El proyecto está construido con una arquitectura modular basada en **Features**
 
 ---
 
-## 📸 Capturas de Pantalla
-
-| Dashboard Principal | Gestión de Inventario |
-|:-------------------:|:---------------------:|
-| ![Dashboard](./public/screenshots/dashboard.png) | ![Inventario](./public/screenshots/inventario.png) |
-| *Vista general de métricas* | *CRUD de productos* |
-
-> *Nota: Asegúrate de reemplazar las rutas de las imágenes con las capturas reales de tu proyecto.*
-
----
 
 ## ✨ Características Principales
 
@@ -48,7 +38,7 @@ Sigue estos pasos para ejecutar el proyecto en tu entorno local. Necesitarás te
 
 ### 1. Clonar el repositorio
 
-```bash
+
 git clone [https://github.com/TU_USUARIO/dolcemiga-proyecto.git](https://github.com/TU_USUARIO/dolcemiga-proyecto.git)
 cd dolcemiga-proyecto
 
