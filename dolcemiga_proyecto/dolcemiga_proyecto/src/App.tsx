@@ -9,18 +9,24 @@ import Ventas from './pages/Ventas'
 import Inventario from './pages/Inventario'
 import Pedidos from './pages/Pedidos'
 import Reportes from './pages/Reportes'
+import Usuarios from './pages/Usuarios' // <--- IMPORTANTE: Importar la nueva página
 
 const AppLayout = () => (
-  <div className="flex">
+  <div className="flex h-screen overflow-hidden bg-gray-50">
+    
     <Sidebar />
-    <main className="flex-1 p-6 bg-gray-50 min-h-screen">
-      <Routes>
-        <Route path="/inicio" element={<Inicio />} />
-        <Route path="/ventas" element={<Ventas />} />
-        <Route path="/inventario" element={<Inventario />} />
-        <Route path="/pedidos" element={<Pedidos />} />
-        <Route path="/reportes" element={<Reportes />} />
-      </Routes>
+    
+    <main className="flex-1 overflow-y-auto p-6">
+      <div className="container mx-auto">
+        <Routes>
+          <Route path="/inicio" element={<Inicio />} />
+          <Route path="/ventas" element={<Ventas />} />
+          <Route path="/inventario" element={<Inventario />} />
+          <Route path="/pedidos" element={<Pedidos />} />
+          <Route path="/reportes" element={<Reportes />} />
+          <Route path="/usuarios" element={<Usuarios />} /> {/* <--- NUEVA RUTA AGREGADA */}
+        </Routes>
+      </div>
     </main>
   </div>
 )
@@ -28,16 +34,15 @@ const AppLayout = () => (
 function App() {
   return (
     <AuthProvider>
-  <Routes>
-    <Route path="/login" element={<Login />} />
-    <Route path="/*" element={
-      <ProtectedRoute>
-        <AppLayout />
-      </ProtectedRoute>
-    }/>
-  </Routes>
-</AuthProvider>
-
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/*" element={
+          <ProtectedRoute>
+            <AppLayout />
+          </ProtectedRoute>
+        }/>
+      </Routes>
+    </AuthProvider>
   )
 }
 

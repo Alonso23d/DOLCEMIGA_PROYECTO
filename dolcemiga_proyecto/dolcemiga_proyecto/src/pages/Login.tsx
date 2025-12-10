@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAuthContext } from '../core/contexts/AuthContext' // ← CORREGIDO
+import { useAuthContext } from '../core/contexts/AuthContext'
 
 const Login = () => {
   const [loginData, setLoginData] = useState({
@@ -10,7 +10,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
-  const { login } = useAuthContext() // ← CORREGIDO
+  const { login } = useAuthContext()
   const navigate = useNavigate()
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -35,16 +35,6 @@ const Login = () => {
     }))
   }
 
-  const usuariosPrueba = [
-    { username: 'admin', contra: 'admin123', rol: 'Administrador' },
-    { username: 'vendedor', contra: 'vendedor123', rol: 'Vendedor' },
-    { username: 'maria', contra: 'maria123', rol: 'Vendedor' }
-  ]
-
-  const llenarCredenciales = (username: string, contra: string) => {
-    setLoginData({ username, contra })
-  }
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary to-pink-600 flex items-center justify-center p-4">
       <div className="max-w-md w-full">
@@ -62,7 +52,7 @@ const Login = () => {
             Iniciar Sesión
           </h2>
           <p className="text-gray-600 text-center mb-8">
-            Ingresa a tu cuenta
+            Ingresa a tu cuenta de administrador
           </p>
 
           {error && (
@@ -118,25 +108,6 @@ const Login = () => {
             </button>
           </form>
 
-          <div className="mt-8 pt-6 border-t border-gray-200">
-            <p className="text-sm text-gray-600 text-center mb-4">
-              Usuarios de prueba para desarrollo:
-            </p>
-            <div className="space-y-2">
-              {usuariosPrueba.map((usuario, index) => (
-                <button
-                  key={index}
-                  type="button"
-                  onClick={() => llenarCredenciales(usuario.username, usuario.contra)}
-                  className="w-full text-left p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors text-sm"
-                >
-                  <div className="font-medium text-gray-900">{usuario.username}</div>
-                  <div className="text-gray-600">Contraseña: {usuario.contra}</div>
-                  <div className="text-primary text-xs">Rol: {usuario.rol}</div>
-                </button>
-              ))}
-            </div>
-          </div>
         </div>
 
         <div className="text-center mt-6">
