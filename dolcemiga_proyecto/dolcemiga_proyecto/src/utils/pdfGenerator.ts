@@ -1,220 +1,220 @@
-import jsPDF from 'jspdf'
-import html2canvas from 'html2canvas'
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+import type { ReporteVentas, ReporteProductos } from '../features/dashboard/services/reportesService';
+
+// Extendemos la interfaz para evitar errores de TS con el plugin
+interface jsPDFWithAutoTable extends jsPDF {
+  lastAutoTable: { finalY: number };
+}
 
 export const pdfGenerator = {
-  // Generar PDF a partir de un elemento HTML
-  async generarPDF(elemento: HTMLElement, nombreArchivo: string = 'reporte.pdf'): Promise<void> {
-    const canvas = await html2canvas(elemento, {
-      scale: 2,
-      useCORS: true,
-      logging: false
-    })
+  
+  // --- 1. REPORTE DE VENTAS (General) ---
+  generarPDFVentas(datos: ReporteVentas): void {
+    const doc = new jsPDF() as jsPDFWithAutoTable;
+    const colorPrimario = [136, 19, 55]; // #881337
 
-    const imgData = canvas.toDataURL('image/png')
-    const pdf = new jsPDF('p', 'mm', 'a4')
-    const pdfWidth = pdf.internal.pageSize.getWidth()
-    const pdfHeight = pdf.internal.pageSize.getHeight()
-    const imgWidth = canvas.width
-    const imgHeight = canvas.height
-    const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight)
-    const imgX = (pdfWidth - imgWidth * ratio) / 2
-    const imgY = 30
+    // Encabezado
+    doc.setFontSize(22);
+    doc.setTextColor(colorPrimario[0], colorPrimario[1], colorPrimario[2]);
+    doc.text('Dolce Miga', 14, 20);
+    
+    doc.setFontSize(14);
+    doc.setTextColor(100);
+    doc.text('Reporte de Ventas', 14, 28);
 
-    pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio)
-    pdf.save(nombreArchivo)
+    doc.setFontSize(10);
+    doc.text(`Generado el: ${new Date().toLocaleDateString()}`, 14, 35);
+    doc.text(`Período: ${new Date(datos.fechaInicio).toLocaleDateString()} al ${new Date(datos.fechaFin).toLocaleDateString()}`, 14, 40);
+
+    // Resumen (Cajas)
+    doc.setDrawColor(200);
+    doc.setFillColor(245, 245, 245);
+    doc.rect(14, 45, 60, 20, 'F'); 
+    doc.rect(80, 45, 60, 20, 'F'); 
+
+    doc.setFontSize(10);
+    doc.setTextColor(50);
+    doc.text('Total Ventas', 19, 52);
+    doc.text('Total Pedidos', 85, 52);
+
+    doc.setFontSize(14);
+    doc.setTextColor(0);
+    
+    doc.setFont("helvetica", "bold");
+    doc.text(`S/. ${datos.totalVentas.toFixed(2)}`, 19, 60);
+    doc.text(`${datos.totalPedidos}`, 85, 60);
+    doc.setFont("helvetica", "normal");
+
+    let currentY = 75;
+
+    // Tabla de Productos Más Vendidos
+    if (datos.productosVendidos.length > 0) {
+      doc.setFontSize(12);
+      doc.setTextColor(colorPrimario[0], colorPrimario[1], colorPrimario[2]);
+      doc.text('Top Productos Vendidos', 14, currentY);
+
+      autoTable(doc, {
+        startY: currentY + 5,
+        head: [['Producto', 'Cant.', 'Total']],
+        body: datos.productosVendidos.slice(0, 10).map((p) => [
+          p.nombre,
+          p.cantidadVendida,
+          `S/. ${p.totalVendido.toFixed(2)}`
+        ]),
+        theme: 'grid',
+        headStyles: { fillColor: [136, 19, 55] },
+        styles: { fontSize: 9 },
+      });
+
+      currentY = doc.lastAutoTable.finalY + 15;
+    }
+
+    // Tabla Detalle de Pedidos
+    doc.setFontSize(12);
+    doc.setTextColor(colorPrimario[0], colorPrimario[1], colorPrimario[2]);
+    doc.text('Detalle de Pedidos', 14, currentY);
+
+    autoTable(doc, {
+      startY: currentY + 5,
+      head: [['ID', 'Fecha', 'Cliente', 'Estado', 'Total']],
+      body: datos.pedidos.map((pedido) => [
+        `#${pedido.id}`,
+        new Date(pedido.fecha).toLocaleDateString(),
+        pedido.cliente.nombres,
+        pedido.estado,
+        `S/. ${pedido.total.toFixed(2)}`
+      ]),
+      theme: 'striped',
+      headStyles: { fillColor: [60, 60, 60] },
+      styles: { fontSize: 8 },
+      didParseCell: function(data) {
+        if (data.section === 'body' && data.column.index === 3) {
+            const estado = data.cell.raw as string;
+            if (estado === 'pendiente') data.cell.styles.textColor = [234, 88, 12];
+            if (estado === 'completado') data.cell.styles.textColor = [22, 163, 74];
+        }
+      }
+    });
+
+    doc.save(`Reporte_Ventas_${datos.fechaInicio || 'General'}.pdf`);
   },
 
-  // Generar PDF de reporte de ventas
-  async generarPDFVentas(datos: any, fechaInicio: string, fechaFin: string): Promise<void> {
-    const pdf = new jsPDF('p', 'mm', 'a4')
-    let yPos = 20
+  // --- 2. REPORTE DE INVENTARIO (General) ---
+  generarPDFProductos(datos: ReporteProductos): void {
+    const doc = new jsPDF() as jsPDFWithAutoTable;
+    const colorPrimario = [136, 19, 55];
 
-    // Título
-    pdf.setFontSize(20)
-    pdf.setTextColor(40, 40, 40)
-    pdf.text('Reporte de Ventas - Dolce Miga', 20, yPos)
-    yPos += 10
-
-    // Período
-    pdf.setFontSize(12)
-    pdf.setTextColor(100, 100, 100)
-    pdf.text(`Período: ${new Date(fechaInicio).toLocaleDateString()} - ${new Date(fechaFin).toLocaleDateString()}`, 20, yPos)
-    yPos += 15
+    // Encabezado
+    doc.setFontSize(22);
+    doc.setTextColor(colorPrimario[0], colorPrimario[1], colorPrimario[2]);
+    doc.text('Dolce Miga', 14, 20);
+    
+    doc.setFontSize(14);
+    doc.setTextColor(100);
+    doc.text('Reporte de Inventario Actual', 14, 28);
+    doc.setFontSize(10);
+    doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 14, 35);
 
     // Resumen
-    pdf.setFontSize(14)
-    pdf.setTextColor(40, 40, 40)
-    pdf.text('Resumen General', 20, yPos)
-    yPos += 10
+    const resumen = [
+        [`Total Productos: ${datos.productos.length}`, `Valor Inventario: S/. ${datos.valorTotalInventario.toFixed(2)}`],
+        [`Stock Total: ${datos.stockTotal} uds`, `Alertas Stock Bajo: ${datos.productosStockBajo.length}`]
+    ];
 
-    pdf.setFontSize(10)
-    pdf.text(`Total de Ventas: $${datos.totalVentas.toFixed(2)}`, 30, yPos)
-    yPos += 6
-    pdf.text(`Total de Pedidos: ${datos.totalPedidos}`, 30, yPos)
-    yPos += 6
-    pdf.text(`Fecha de Generación: ${new Date().toLocaleDateString()}`, 30, yPos)
-    yPos += 15
+    autoTable(doc, {
+        startY: 45,
+        body: resumen,
+        theme: 'plain',
+        styles: { fontSize: 10, fontStyle: 'bold' }
+    });
 
-    // Productos más vendidos
-    if (datos.productosVendidos && datos.productosVendidos.length > 0) {
-      pdf.setFontSize(14)
-      pdf.text('Productos Más Vendidos', 20, yPos)
-      yPos += 10
-
-      pdf.setFontSize(8)
-      datos.productosVendidos.slice(0, 10).forEach((producto: any, index: number) => {
-        if (yPos > 270) {
-          pdf.addPage()
-          yPos = 20
+    // Tabla Principal de Inventario
+    autoTable(doc, {
+      startY: doc.lastAutoTable.finalY + 10,
+      head: [['Producto', 'Categoría', 'Precio', 'Stock', 'Valor Total']],
+      body: datos.productos.map((p) => [
+        p.nombre,
+        p.categoria,
+        `S/. ${p.precio.toFixed(2)}`,
+        p.stock,
+        `S/. ${(p.stock * p.precio).toFixed(2)}`
+      ]),
+      theme: 'grid',
+      headStyles: { fillColor: [136, 19, 55] },
+      styles: { fontSize: 9, valign: 'middle' },
+      
+      didParseCell: function(data) {
+        if (data.section === 'body') {
+            const rawRow = data.row.raw as any[];
+            const stock = Number(rawRow[3]); 
+            
+            if (stock < 10) {
+                data.cell.styles.fillColor = [255, 241, 242];
+                data.cell.styles.textColor = [190, 18, 60];
+            }
         }
-        
-        pdf.text(`${index + 1}. ${producto.nombre}`, 25, yPos)
-        pdf.text(`Cantidad: ${producto.cantidadVendida}`, 120, yPos)
-        pdf.text(`Total: $${producto.totalVendido.toFixed(2)}`, 160, yPos)
-        yPos += 6
-      })
-      yPos += 10
-    }
+      }
+    });
 
-    // Detalle de pedidos
-    if (datos.pedidos && datos.pedidos.length > 0) {
-      pdf.setFontSize(14)
-      pdf.text('Detalle de Pedidos', 20, yPos)
-      yPos += 10
-
-      pdf.setFontSize(7)
-      datos.pedidos.forEach((pedido: any, index: number) => {
-        if (yPos > 270) {
-          pdf.addPage()
-          yPos = 20
-        }
-
-        pdf.text(`Pedido #${pedido.id} - ${pedido.cliente.nombres}`, 25, yPos)
-        yPos += 4
-        pdf.text(`Fecha: ${new Date(pedido.fecha).toLocaleDateString()}`, 25, yPos)
-        pdf.text(`Total: $${pedido.total.toFixed(2)}`, 100, yPos)
-        pdf.text(`Estado: ${pedido.estado}`, 150, yPos)
-        yPos += 6
-
-        pedido.productos.forEach((item: any) => {
-          pdf.text(`  - ${item.nombre} x${item.cantidad} = $${item.subtotal.toFixed(2)}`, 30, yPos)
-          yPos += 4
-        })
-        yPos += 4
-      })
-    }
-
-    pdf.save(`reporte-ventas-${fechaInicio}-a-${fechaFin}.pdf`)
+    doc.save(`Inventario_DolceMiga_${new Date().toLocaleDateString()}.pdf`);
   },
 
-  // Generar PDF de reporte de productos
-  async generarPDFProductos(datos: any): Promise<void> {
-    const pdf = new jsPDF('p', 'mm', 'a4')
-    let yPos = 20
+  // --- 3. COMPROBANTE DE VENTA (Individual) ---
+  generarComprobante(pedido: any): void {
+    // Usamos formato A6 (tamaño boleta pequeña)
+    const doc = new jsPDF({ format: 'a6', unit: 'mm' }) as jsPDFWithAutoTable; 
+    const colorPrimario = [136, 19, 55];
 
-    // Título
-    pdf.setFontSize(20)
-    pdf.setTextColor(40, 40, 40)
-    pdf.text('Reporte de Inventario - Dolce Miga', 20, yPos)
-    yPos += 10
+    // Encabezado
+    doc.setFontSize(14);
+    doc.setTextColor(colorPrimario[0], colorPrimario[1], colorPrimario[2]);
+    doc.text('Dolce Miga', 10, 10);
+    
+    doc.setFontSize(8);
+    doc.setTextColor(100);
+    doc.text('RUC: 20123456789', 10, 14);
+    doc.text('Dirección: Av. Siempre Viva 123', 10, 17);
+    
+    // Línea separadora
+    doc.setDrawColor(200);
+    doc.line(5, 20, 100, 20);
 
-    // Fecha
-    pdf.setFontSize(12)
-    pdf.setTextColor(100, 100, 100)
-    pdf.text(`Fecha de Generación: ${new Date().toLocaleDateString()}`, 20, yPos)
-    yPos += 15
+    // Datos del Cliente y Pedido
+    doc.setFontSize(9);
+    doc.setTextColor(0);
+    doc.text(`Pedido: #${pedido.id}`, 10, 25);
+    doc.text(`Fecha: ${new Date(pedido.fecha).toLocaleDateString()}`, 60, 25);
+    
+    doc.text(`Cliente: ${pedido.cliente.nombres}`, 10, 30);
+    doc.text(`DNI: ${pedido.cliente.dni || '-'}`, 10, 34);
 
-    // Resumen
-    pdf.setFontSize(14)
-    pdf.setTextColor(40, 40, 40)
-    pdf.text('Resumen del Inventario', 20, yPos)
-    yPos += 10
+    // Tabla de productos del pedido
+    autoTable(doc, {
+      startY: 38,
+      head: [['Cant.', 'Producto', 'Total']],
+      body: pedido.productos.map((p: any) => [
+        p.cantidad,
+        p.nombre,
+        `S/. ${p.subtotal.toFixed(2)}`
+      ]),
+      theme: 'plain',
+      styles: { fontSize: 8, cellPadding: 1 },
+      headStyles: { fillColor: [240, 240, 240], textColor: 50, fontStyle: 'bold' }
+    });
 
-    pdf.setFontSize(10)
-    pdf.text(`Total de Productos: ${datos.productos.length}`, 30, yPos)
-    yPos += 6
-    pdf.text(`Stock Total: ${datos.stockTotal} unidades`, 30, yPos)
-    yPos += 6
-    pdf.text(`Valor Total del Inventario: $${datos.valorTotalInventario.toFixed(2)}`, 30, yPos)
-    yPos += 6
-    pdf.text(`Productos con Stock Bajo: ${datos.productosStockBajo.length}`, 30, yPos)
-    yPos += 15
+    // Total Final
+    const finalY = doc.lastAutoTable.finalY + 5;
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "bold");
+    doc.text(`TOTAL: S/. ${pedido.total.toFixed(2)}`, 60, finalY);
+    
+    // Pie de página
+    doc.setFontSize(7);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(150);
+    doc.text('¡Gracias por tu preferencia!', 35, finalY + 10, { align: 'center' });
 
-    // Lista de productos
-    pdf.setFontSize(14)
-    pdf.text('Lista de Productos', 20, yPos)
-    yPos += 10
-
-    // Encabezados de tabla
-    pdf.setFontSize(8)
-    pdf.setTextColor(255, 255, 255)
-    pdf.setFillColor(136, 12, 72) // Color primary
-    pdf.rect(20, yPos, 170, 6, 'F')
-    pdf.text('Producto', 22, yPos + 4)
-    pdf.text('Categoría', 80, yPos + 4)
-    pdf.text('Stock', 120, yPos + 4)
-    pdf.text('Precio', 140, yPos + 4)
-    pdf.text('Valor', 160, yPos + 4)
-    yPos += 8
-
-    // Datos de productos
-    pdf.setTextColor(0, 0, 0)
-    datos.productos.forEach((producto: any) => {
-      if (yPos > 270) {
-        pdf.addPage()
-        yPos = 20
-        // Volver a dibujar encabezados
-        pdf.setTextColor(255, 255, 255)
-        pdf.setFillColor(136, 12, 72)
-        pdf.rect(20, yPos, 170, 6, 'F')
-        pdf.text('Producto', 22, yPos + 4)
-        pdf.text('Categoría', 80, yPos + 4)
-        pdf.text('Stock', 120, yPos + 4)
-        pdf.text('Precio', 140, yPos + 4)
-        pdf.text('Valor', 160, yPos + 4)
-        yPos += 8
-        pdf.setTextColor(0, 0, 0)
-      }
-
-      // Resaltar productos con stock bajo
-      if (producto.stock < 10) {
-        pdf.setFillColor(255, 230, 230)
-        pdf.rect(20, yPos - 2, 170, 6, 'F')
-      }
-
-      pdf.text(producto.nombre.substring(0, 30), 22, yPos + 4)
-      pdf.text(producto.categoria, 80, yPos + 4)
-      pdf.text(producto.stock.toString(), 120, yPos + 4)
-      pdf.text(`$${producto.precio.toFixed(2)}`, 140, yPos + 4)
-      pdf.text(`$${(producto.precio * producto.stock).toFixed(2)}`, 160, yPos + 4)
-      yPos += 6
-    })
-
-    // Productos con stock bajo
-    if (datos.productosStockBajo.length > 0) {
-      yPos += 10
-      if (yPos > 250) {
-        pdf.addPage()
-        yPos = 20
-      }
-
-      pdf.setFontSize(14)
-      pdf.setTextColor(255, 0, 0)
-      pdf.text('Productos con Stock Bajo', 20, yPos)
-      yPos += 10
-
-      pdf.setFontSize(8)
-      pdf.setTextColor(0, 0, 0)
-      datos.productosStockBajo.forEach((producto: any) => {
-        if (yPos > 270) {
-          pdf.addPage()
-          yPos = 20
-        }
-        pdf.text(`${producto.nombre} - Stock: ${producto.stock}`, 25, yPos)
-        yPos += 6
-      })
-    }
-
-    pdf.save('reporte-inventario.pdf')
+    doc.save(`Comprobante_Pedido_${pedido.id}.pdf`);
   }
-}
+};

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Edit, Trash2, Plus, Search, Package } from 'lucide-react'; // Necesitas importar iconos
 import FormularioProducto from '../features/inventario/components/FormularioProducto';
 import { useProducts } from '../features/inventario/hooks/useProducts';
 import type { Producto } from '../features/inventario/models/Producto';
@@ -6,6 +7,7 @@ import type { Producto } from '../features/inventario/models/Producto';
 const Inventario = () => {
   const [showForm, setShowForm] = useState(false);
   const [productoEdit, setProductoEdit] = useState<Producto | null>(null);
+  const [busqueda, setBusqueda] = useState(''); // Estado para filtro simple
   
   const {
     productos,
@@ -26,7 +28,7 @@ const Inventario = () => {
     if (confirm('¿Estás seguro de que quieres eliminar este producto?')) {
       try {
         await deleteProducto(id);
-        alert('Producto eliminado correctamente');
+        // alert('Producto eliminado correctamente'); // Opcional, a veces es molesto
       } catch (err) {}
     }
   };
@@ -52,144 +54,163 @@ const Inventario = () => {
     setProductoEdit(null);
   };
 
-  const getStockBgColor = (stock: number): string => {
-    if (stock < 10) return 'bg-red-100 text-red-800';
-    if (stock < 20) return 'bg-orange-100 text-orange-800';
-    return 'bg-green-100 text-green-800';
-  };
+  // Filtrado simple por nombre
+  const productosFiltrados = productos.filter(p => 
+    p.nombre.toLowerCase().includes(busqueda.toLowerCase())
+  );
 
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-        <span className="ml-3 text-lg">Cargando productos...</span>
+        <span className="ml-3 text-lg">Cargando inventario...</span>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 py-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-primary">Inventario</h1>
-        <button
-          onClick={handleCreate}
-          className="bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors flex items-center gap-2 font-semibold"
-        >
-          <span className="text-xl">+</span> Nuevo Producto
-        </button>
+    <div className="space-y-6">
+      {/* Encabezado y Acciones */}
+      <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+        <div>
+           <h1 className="text-3xl font-bold text-primary">Inventario</h1>
+           <p className="text-gray-500 text-sm">Gestiona tus productos, precios y stock</p>
+        </div>
+        
+        <div className="flex gap-3 w-full md:w-auto">
+            {/* Barra de búsqueda */}
+            <div className="relative flex-1 md:w-64">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                <input 
+                    type="text"
+                    placeholder="Buscar producto..."
+                    className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    value={busqueda}
+                    onChange={(e) => setBusqueda(e.target.value)}
+                />
+            </div>
+            
+            <button
+            onClick={handleCreate}
+            className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors flex items-center gap-2 font-medium shadow-sm"
+            >
+            <Plus size={20} /> Nuevo
+            </button>
+        </div>
       </div>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
           {error}
         </div>
       )}
 
-      {/* Estadísticas */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="bg-white p-6 rounded-lg shadow-md border-l-4 border-primary">
-          <h3 className="font-semibold text-gray-600 mb-2">Total Productos</h3>
-          <p className="text-3xl font-bold text-primary">{stats.totalProductos}</p>
+      {/* Estadísticas Rápidas (Barra superior) */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 flex items-center justify-between">
+           <div>
+               <p className="text-sm text-gray-500">Total Productos</p>
+               <p className="text-2xl font-bold text-gray-800">{stats.totalProductos}</p>
+           </div>
+           <Package className="text-blue-500 opacity-20" size={40} />
         </div>
-        <div className="bg-white p-6 rounded-lg shadow-md border-l-4 border-orange-500">
-          <h3 className="font-semibold text-gray-600 mb-2">Stock Bajo</h3>
-          <p className="text-3xl font-bold text-orange-500">{stats.productosStockBajo}</p>
+        <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 flex items-center justify-between">
+           <div>
+               <p className="text-sm text-gray-500">Valor Inventario</p>
+               <p className="text-2xl font-bold text-green-600">S/. {stats.valorTotal.toFixed(2)}</p>
+           </div>
+           <div className="text-green-500 opacity-20 text-3xl">S/.</div>
         </div>
-        <div className="bg-white p-6 rounded-lg shadow-md border-l-4 border-green-500">
-          <h3 className="font-semibold text-gray-600 mb-2">Valor Total</h3>
-          <p className="text-3xl font-bold text-green-500">
-            S/. {stats.valorTotal.toFixed(2)}
-          </p>
+        <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 flex items-center justify-between">
+           <div>
+               <p className="text-sm text-gray-500">Stock Bajo</p>
+               <p className="text-2xl font-bold text-red-500">{stats.productosStockBajo}</p>
+           </div>
+           <div className="w-3 h-3 rounded-full bg-red-500 animate-pulse"></div>
         </div>
       </div>
 
-      {/* Grid de Cards */}
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-semibold">Productos en Inventario</h2>
-          <span className="text-sm text-gray-500">
-            Mostrando {productos.length} productos
-          </span>
+      {/* TABLA DE PRODUCTOS */}
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+                <thead>
+                    <tr className="bg-gray-50 border-b border-gray-200 text-xs uppercase text-gray-500 font-semibold">
+                        <th className="p-4">Producto</th>
+                        <th className="p-4">Categoría</th>
+                        <th className="p-4">Precio</th>
+                        <th className="p-4">Stock</th>
+                        <th className="p-4 text-right">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                    {productosFiltrados.length === 0 ? (
+                        <tr>
+                            <td colSpan={5} className="p-8 text-center text-gray-500">
+                                No se encontraron productos
+                            </td>
+                        </tr>
+                    ) : (
+                        productosFiltrados.map((producto) => (
+                        <tr key={producto.id} className="hover:bg-gray-50 transition-colors">
+                            <td className="p-4">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-12 h-12 rounded-lg bg-gray-100 overflow-hidden flex-shrink-0 border border-gray-200">
+                                        <img 
+                                            src={producto.imagen} 
+                                            alt={producto.nombre}
+                                            className="w-full h-full object-cover"
+                                            onError={(e) => (e.target as HTMLImageElement).src = 'https://via.placeholder.com/100?text=IMG'}
+                                        />
+                                    </div>
+                                    <div>
+                                        <p className="font-medium text-gray-900">{producto.nombre}</p>
+                                        <p className="text-xs text-gray-500 truncate max-w-[200px]">{producto.descripcion}</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td className="p-4">
+                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700">
+                                    {producto.categoria}
+                                </span>
+                            </td>
+                            <td className="p-4 font-medium text-gray-700">
+                                S/. {producto.precio.toFixed(2)}
+                            </td>
+                            <td className="p-4">
+                                <div className="flex items-center gap-2">
+                                    <div className={`w-2 h-2 rounded-full ${
+                                        producto.stock < 10 ? 'bg-red-500' : producto.stock < 20 ? 'bg-orange-500' : 'bg-green-500'
+                                    }`}></div>
+                                    <span className={`text-sm ${producto.stock < 10 ? 'text-red-600 font-medium' : 'text-gray-600'}`}>
+                                        {producto.stock} uds.
+                                    </span>
+                                </div>
+                            </td>
+                            <td className="p-4 text-right">
+                                <div className="flex justify-end gap-2">
+                                    <button 
+                                        onClick={() => handleEdit(producto)}
+                                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                                        title="Editar"
+                                    >
+                                        <Edit size={18} />
+                                    </button>
+                                    <button 
+                                        onClick={() => producto.id && handleDelete(producto.id)}
+                                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                        title="Eliminar"
+                                    >
+                                        <Trash2 size={18} />
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        ))
+                    )}
+                </tbody>
+            </table>
         </div>
-
-        {productos.length === 0 ? (
-          <div className="text-center py-12">
-            <div className="text-6xl mb-4">📦</div>
-            <p className="text-gray-500 text-lg mb-4">No hay productos en el inventario</p>
-            <button
-              onClick={handleCreate}
-              className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary/90 transition-colors"
-            >
-              Agregar primer producto
-            </button>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {productos.map((producto) => (
-              <div 
-                key={producto.id} 
-                className="border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300 bg-white"
-              >
-                <div className="h-48 overflow-hidden bg-gray-100">
-                  <img 
-                    src={producto.imagen} 
-                    alt={producto.nombre}
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = 'https://via.placeholder.com/300x200?text=Imagen+No+Disponible';
-                    }}
-                  />
-                </div>
-                
-                <div className="p-4">
-                  <div className="flex justify-between items-start mb-2">
-                    <h3 className="font-semibold text-gray-800 text-lg leading-tight">
-                      {producto.nombre}
-                    </h3>
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap ${getStockBgColor(producto.stock)}`}>
-                      {producto.stock} en stock
-                    </span>
-                  </div>
-                  
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs">
-                      {producto.categoria}
-                    </span>
-                  </div>
-                  
-                  {producto.descripcion && (
-                    <p className="text-sm text-gray-500 mb-3 line-clamp-2">
-                      {producto.descripcion}
-                    </p>
-                  )}
-                  
-                  <div className="flex justify-between items-center mt-4">
-                    <span className="text-2xl font-bold text-primary">
-                      S/. {producto.precio.toFixed(2)}
-                    </span>
-                    <div className="flex gap-2">
-                      <button 
-                        onClick={() => handleEdit(producto)}
-                        className="bg-blue-500 text-white px-3 py-2 rounded text-sm hover:bg-blue-600 transition-colors flex items-center gap-1"
-                      >
-                        <span>✏️</span>
-                        Editar
-                      </button>
-                      <button 
-                        onClick={() => producto.id && handleDelete(producto.id)}
-                        className="bg-red-500 text-white px-3 py-2 rounded text-sm hover:bg-red-600 transition-colors flex items-center gap-1"
-                      >
-                        <span>🗑️</span>
-                        Eliminar
-                      </button>
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
       </div>
 
       {showForm && (

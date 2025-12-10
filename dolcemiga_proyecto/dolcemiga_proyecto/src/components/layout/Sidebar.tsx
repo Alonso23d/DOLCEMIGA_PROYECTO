@@ -1,19 +1,25 @@
 import { Link, useLocation } from 'react-router-dom'
 import { useAuthContext } from '../../core/contexts/AuthContext'
-// ... resto del código igual hasta el return
+import { Home, DollarSign, Package, ClipboardList, BarChart2, Users } from 'lucide-react' // Usaremos lucide-react si lo tienes instalado
 
 const Sidebar = () => {
   const location = useLocation()
   const { usuario, logout } = useAuthContext()
 
-  const menuItems = [
-    { path: '/', label: 'Inicio', icon: '🏠' },
+  // Definimos items básicos para todos
+  const baseMenuItems = [
+    { path: '/inicio', label: 'Inicio', icon: '🏠' },
     { path: '/ventas', label: 'Ventas', icon: '💰' },
     { path: '/inventario', label: 'Inventario', icon: '📦' },
     { path: '/pedidos', label: 'Pedidos', icon: '📋' },
     { path: '/reportes', label: 'Reportes', icon: '📊' },
   ]
 
+  // Si es admin, agregamos el item de Usuarios
+  // Cambiamos 'Administrador' por 'admin' para que coincida con tu tipo de TypeScript
+const menuItems = usuario?.rol === 'admin' 
+  ? [...baseMenuItems, { path: '/usuarios', label: 'Usuarios', icon: <Users size={20} /> }] // Asegúrate de importar Users de lucide-react o poner el emoji '👥'
+  : baseMenuItems
   const isActive = (path: string): boolean => {
     return location.pathname === path
   }
@@ -25,7 +31,8 @@ const Sidebar = () => {
   }
 
   return (
-    <aside className="w-64 h-screen bg-gradient-to-b from-primary to-[#6a0a3a] text-white p-6 shadow-lg flex flex-col">
+    <aside className="w-64 h-full flex-shrink-0 bg-gradient-to-b from-primary to-[#6a0a3a] text-white p-6 shadow-lg flex flex-col">
+      
       {/* Logo/Header */}
       <div className="mb-8">
         <h2 className="text-2xl font-bold text-white">Dolce Miga</h2>
@@ -46,7 +53,7 @@ const Sidebar = () => {
       </div>
 
       {/* Menú de navegación */}
-      <nav className="flex-1">
+      <nav className="flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar">
         <ul className="space-y-2">
           {menuItems.map((item) => (
             <li key={item.path}>
@@ -67,7 +74,7 @@ const Sidebar = () => {
       </nav>
 
       {/* Footer del sidebar */}
-      <div className="pt-4 border-t border-white/20">
+      <div className="pt-4 border-t border-white/20 mt-auto">
         <button
           onClick={handleLogout}
           className="w-full flex items-center gap-3 py-3 px-4 rounded-lg hover:bg-white hover:bg-opacity-20 transition-colors text-red-200 hover:text-red-100"

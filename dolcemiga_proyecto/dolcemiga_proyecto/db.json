@@ -3,19 +3,19 @@
     {
       "id": "1",
       "nombre": "Torta Chocolate",
-      "stock": 14,
+      "stock": 13,
       "precio": 25,
       "categoria": "Tortas",
-      "imagen": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80",
+      "imagen": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
       "descripcion": "Deliciosa torta de chocolate con cobertura cremosa"
     },
     {
       "id": "2",
       "nombre": "Cupcakes Vainilla",
-      "stock": 21,
+      "stock": 20,
       "precio": 3.5,
       "categoria": "Postres Individuales",
-      "imagen": "https://images.unsplash.com/photo-1614707267537-b85aaf00c4b7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80",
+      "imagen": "https://images.unsplash.com/photo-1614707267537-b85aaf00c4b7?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
       "descripcion": "Suaves cupcakes de vainilla con frosting"
     },
     {
@@ -24,8 +24,107 @@
       "stock": 43,
       "precio": 1.2,
       "categoria": "Galletas",
-      "imagen": "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80",
+      "imagen": "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
       "descripcion": "Crujientes galletas de mantequilla artesanales"
+    },
+    {
+      "id": "069c",
+      "nombre": "Torta Red Velvet",
+      "stock": 8,
+      "precio": 45,
+      "categoria": "Tortas",
+      "imagen": "https://ladespensa.com.pe/wp-content/uploads/2020/05/torta-red-velvet-scaled.jpg",
+      "descripcion": "Elegante torta de terciopelo rojo con frosting de queso crema"
+    },
+    {
+      "id": "5",
+      "nombre": "Croissant de Mantequilla",
+      "stock": 25,
+      "precio": 4.5,
+      "categoria": "Panadería",
+      "imagen": "https://images.unsplash.com/photo-1555507036-ab1f4038808a?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+      "descripcion": "Clásico francés, dorado y crujiente por fuera"
+    },
+    {
+      "id": "6",
+      "nombre": "Cheesecake de Maracuyá",
+      "stock": 10,
+      "precio": 38,
+      "categoria": "Tortas",
+      "imagen": "https://images.unsplash.com/photo-1533134242443-d4fd215305ad?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+      "descripcion": "Fresco postre con base de galleta y jalea tropical"
+    },
+    {
+      "id": "7",
+      "nombre": "Brownie con Nueces",
+      "stock": 33,
+      "precio": 5,
+      "categoria": "Postres Individuales",
+      "imagen": "https://content-cocina.lecturas.com/medio/2021/02/10/brownie-de-nueces-pecanas_072b2891_800x800.jpg",
+      "descripcion": "Cuadrado de chocolate intenso y húmedo con nueces"
+    },
+    {
+      "id": "8",
+      "nombre": "Caja de Alfajores x6",
+      "stock": 20,
+      "precio": 12,
+      "categoria": "Galletas",
+      "imagen": "https://images.unsplash.com/photo-1565557623262-b51c2513a641?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+      "descripcion": "Alfajores de maicena rellenos de manjar blanco"
+    },
+    {
+      "id": "9",
+      "nombre": "Tartaleta de Frutas",
+      "stock": 15,
+      "precio": 6.5,
+      "categoria": "Postres Individuales",
+      "imagen": "https://images.unsplash.com/photo-1560180474-e8563fd75bab?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+      "descripcion": "Base crocante con crema pastelera y frutas de estación"
+    },
+    {
+      "id": "10",
+      "nombre": "Pie de Limón",
+      "stock": 5,
+      "precio": 32,
+      "categoria": "Tortas",
+      "imagen": "https://lacaranola.com/wp-content/uploads/2021/07/El-Pie-de-Limo%CC%81n-de-La-Caran%CC%83ola.jpg",
+      "descripcion": "El equilibrio perfecto entre dulce y ácido con merengue"
+    },
+    {
+      "id": "11",
+      "nombre": "Macarons Surtidos x5",
+      "stock": 17,
+      "precio": 15,
+      "categoria": "Postres Especiales",
+      "imagen": "https://images.unsplash.com/photo-1569864358642-9d1684040f43?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+      "descripcion": "Delicados merengues franceses de almendra"
+    },
+    {
+      "id": "12",
+      "nombre": "Torta de Zanahoria",
+      "stock": 5,
+      "precio": 42,
+      "categoria": "Tortas",
+      "imagen": "https://images.unsplash.com/photo-1621303837174-89787a7d4729?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+      "descripcion": "Bizcocho especiado con nueces y frosting de queso"
+    },
+    {
+      "id": "13",
+      "nombre": "Tiramisú Clásico",
+      "stock": 12,
+      "precio": 8.5,
+      "categoria": "Postres Especiales",
+      "imagen": "https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+      "descripcion": "Postre italiano con café, mascarpone y cacao"
+    },
+    {
+      "id": "14",
+      "nombre": "Pan Ciabatta Artesanal",
+      "stock": 40,
+      "precio": 1.5,
+      "categoria": "Panadería",
+      "imagen": "https://images.unsplash.com/photo-1589367920969-ab8e050bbb04?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+      "descripcion": "Pan rústico italiano de corteza crujiente"
     }
   ],
   "categorias": [
@@ -204,6 +303,55 @@
       "fecha": "2025-12-08T05:18:28.005Z",
       "estado": "completado",
       "metodoPago": "yape"
+    },
+    {
+      "id": "7582",
+      "cliente": {
+        "dni": "74058820",
+        "nombres": "Jefferson Jesus",
+        "telefono": "936587087"
+      },
+      "productos": [
+        {
+          "productoId": "1",
+          "nombre": "Torta Chocolate",
+          "precio": 25,
+          "cantidad": 1,
+          "subtotal": 25
+        },
+        {
+          "productoId": "2",
+          "nombre": "Cupcakes Vainilla",
+          "precio": 3.5,
+          "cantidad": 1,
+          "subtotal": 3.5
+        },
+        {
+          "productoId": "7",
+          "nombre": "Brownie con Nueces",
+          "precio": 5,
+          "cantidad": 2,
+          "subtotal": 10
+        },
+        {
+          "productoId": "11",
+          "nombre": "Macarons Surtidos x5",
+          "precio": 15,
+          "cantidad": 1,
+          "subtotal": 15
+        },
+        {
+          "productoId": "10",
+          "nombre": "Pie de Limón",
+          "precio": 32,
+          "cantidad": 1,
+          "subtotal": 32
+        }
+      ],
+      "total": 85.5,
+      "fecha": "2025-12-10T16:30:08.411Z",
+      "estado": "completado",
+      "metodoPago": "yape"
     }
   ],
   "clientes": [],
@@ -233,6 +381,15 @@
       "email": "maria@dolcemiga.com",
       "nombre": "Maria Gonzalez",
       "rol": "vendedor",
+      "activo": true
+    },
+    {
+      "id": "2de1",
+      "nombre": "Yadsumi",
+      "username": "yads",
+      "contra": "yads123",
+      "rol": "vendedor",
+      "email": "yads@dolcemiga.com",
       "activo": true
     }
   ]
